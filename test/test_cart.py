@@ -1,4 +1,5 @@
 import pytest
+from src.cart import Cart
 from src.catalog import Catalog, Product
 
 def test_cart_total():
