@@ -14,6 +14,23 @@ class Cart:
         if not self.catalog.get_by_sku(sku): raise ValueError("Not in catalog")
         self.items[sku] = self.items.get(sku, 0) + qty
 
-    def get_total(self):
-        return sum(self.catalog.get_by_sku(sku).price * qty for sku, qty in self.items.items())
+def get_total(self) -> float:
+    subtotal = 0.0
+    bulk_discount = 0.0
 
+    for sku, qty in self.items.items():
+        product = self.catalog.get_by_sku(sku)
+        line_price = product.price * qty
+        
+        if qty >= 10:
+            bulk_discount += line_price * 0.10
+        
+        subtotal += line_price
+
+    total_after_bulk = subtotal - bulk_discount
+
+    order_discount = 0.0
+    if total_after_bulk >= 1000:
+        order_discount = total_after_bulk * 0.05
+
+    return total_after_bulk - order_discount
